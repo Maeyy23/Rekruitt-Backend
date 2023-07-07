@@ -1,0 +1,33 @@
+{
+  "name": "nodejs-app",
+  "version": "1.0.0",
+  "description": "Applicant-Recruiter Login Authentication",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/server.js"
+  },
+  "author": "Mabel Obochi",
+  "license": "ISC",
+  "keywords": [
+    "node.js",
+    "express",
+    "Login",
+    "Registration",
+    "Authentication"
+  ],
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cookie-session": "^2.0.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.6.0",
+    "mongoose": "^7.3.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "nodemon": "^2.0.22"
+  }
+}
