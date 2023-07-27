@@ -1,9 +1,9 @@
-//logic for signUp  by applicants
-
 const applicants = require('../models/applicants.models');
 const bcrypt = require("bcrypt");
 const responses= require("../utils/response")
 const jwt = require("jsonwebtoken");
+const generateResetPin = require('../utils/generateResetPin');
+const sendMail = require("../utils/sendMail");
 
 
 async function createApplicant(payload) {
@@ -46,6 +46,51 @@ const login = async (payload) => {
   }
 }
 
+//forget password logic
 
+  const forgotPassword = async (payload) => {
+       
+    const emailFound = await applicants.findOne({ Email: payload.Email })
+    if (!emailFound) {
+        return responses.buildFailureResponse("Email not found", 400)
+    }
+    const resetPin = generateResetPin()
+    const updatedUser = await applicants.findByIdAndUpdate({ _id: emailFound._id }, { resetPin: resetPin }, { new: true });
 
-module.exports = { createApplicant, login }
+    const forgotPasswordPayload = {
+        to: updatedUser.Email,
+        subject: "RESET PASSWORD",
+        pin: resetPin,
+    };
+    sendMail.sendForgotPasswordMail(forgotPasswordPayload);
+    return responses.buildSuccessResponse(
+        "Forgot Password Successful",
+        200,
+        updatedUser
+    );
+};
+
+//reset password logic
+const resetPassword = async (payload) => {
+  const foundUserAndPin = await applicants.findOne({Email: payload.Email, resetPin: payload.resetPin, });
+  if (!foundUserAndPin) {
+    return responses.buildFailureResponse("Reset Pin Invalid", 400);
+  };
+  const saltRounds = 10;
+  const generatedSalt = await bcrypt.genSalt(saltRounds);
+
+  const hashedPassword = await bcrypt.hash(payload.password, generatedSalt);
+
+  const updatedUser = await applicants.findByIdAndUpdate(
+    { _id: foundUserAndPin._id },
+    { password: hashedPassword, resetPin: null },
+    { new: true }
+  );
+  return responses.buildSuccessResponse(
+    "Password Reset Successful",
+    200,
+    updatedUser
+  );
+};
+
+module.exports = { createApplicant, login, forgotPassword, resetPassword }

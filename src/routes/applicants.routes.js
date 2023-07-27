@@ -6,5 +6,7 @@ const applicantController = require('../controllers/applicants.controllers');
 
 router.post('/createApplicant', applicantValidation, applicantController.createApplicant);
 router.post('/login', applicantController.login);
+router.post('/forgot-password', applicantController.forgotPassword);
+router.post('/reset-password', applicantController.resetPassword);
 
 module.exports = router;

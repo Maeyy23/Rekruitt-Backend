@@ -20,6 +20,9 @@ const applicantSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    resetPin: {
+      type: Number,
+    },
   },
 
   { timestamps: true }

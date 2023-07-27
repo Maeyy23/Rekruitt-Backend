@@ -17,7 +17,10 @@ const recruiterSchema = mongoose.Schema(
         password: {
             type: 'string',
             required: true,
-        }
+        },
+        resetPin: {
+            type: Number,
+          },
     },
     {timeStamps: true}
 
