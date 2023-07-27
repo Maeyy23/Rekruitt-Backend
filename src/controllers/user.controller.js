@@ -10,7 +10,7 @@ const signUpApplicantController = async (req, res) => {
         }
         return res.status(data.statusCode).json(data)
     } catch (error) {
-        return res.status(error?.statusCode).json({
+        return res.status(500).json({
             status: 'failure',
             message: error?.message})
     }
@@ -45,8 +45,34 @@ const loginController = async (req, res) => {
     }
 };
 
+const forgotPasswordController = async (req, res) => {
+    try {
+        const data = await userServices.forgotPassword(req.body)
+        return res.status(data.statusCode).json(data)
+    } catch (error) {
+        return res.status(500).json({
+            status: 'failure', 
+            message: error?.message
+        })
+    }
+};
+
+const resetPasswordController = async (req, res) => {
+    try {
+       const data = await userServices.resetPassword(req.body)
+       return res.status(data.statusCode).json(data) 
+    } catch (error) {
+        return res.status(500).json({
+            status: 'failure',
+            message: error?.message
+        })
+    };
+}
+
 module.exports = {
     signUpApplicantController,
     signUpRecruiterController,
-    loginController
+    loginController,
+    forgotPasswordController,
+    resetPasswordController
 };
