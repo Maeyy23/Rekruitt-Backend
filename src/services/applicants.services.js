@@ -20,36 +20,35 @@ const { Email} = payload;
     const savedApplicant = await applicants.create(payload);
     console.log("Saved Applicant:", savedApplicant);
     return responses.buildSuccessResponse("applicant created successfully", 201, savedApplicant);
-}
+};
 
 const login = async (payload) => {
   try {
     const foundUser = await applicants.findOne({ Email: payload.Email }).lean()
-    
-      if(!foundUser) {
-           return responses.buildFailureResponse('user not found', 400)
-      }
+    if (!foundUser) {
+      return responses.buildFailureResponse('user not found', 400)
+    };
+
     const foundPassword = await bcrypt.compare(payload.password, foundUser.password)
-      if(!foundPassword) {
-           return responses.buildFailureResponse('password incorrect', 403)
-      }
-    const token = jwt.sign({ email: foundUser.email, firstName: foundUser.firstName, _id: foundUser._id }, process.env.JWT_SECRET,
+    if (!foundPassword) {
+      return responses.buildFailureResponse('password incorrect', 403)
+    };
+    const token = jwt.sign({ Email: foundUser.Email, firstName: foundUser.firstName, _id: foundUser._id }, process.env.JWT_SECRET,
       {
-            expiresIn: '30d'
+        expiresIn: '30d'
       })
     
-      foundUser.accessToken = token
-  return responses.buildSuccessResponse('login successfully', 200, foundUser)
+    foundUser.accessToken = token
+    return responses.buildSuccessResponse('login successfully', 200, foundUser)
   }
   catch (error) {
-       return responses.buildFailureResponse('unable to login', 500)
+    return responses.buildFailureResponse('unable to login', 500)
   }
-}
+};
 
 //forget password logic
 
-  const forgotPassword = async (payload) => {
-       
+  const forgotPassword = async (payload) => {   
     const emailFound = await applicants.findOne({ Email: payload.Email })
     if (!emailFound) {
         return responses.buildFailureResponse("Email not found", 400)

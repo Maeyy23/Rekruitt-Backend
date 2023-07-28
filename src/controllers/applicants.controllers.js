@@ -11,7 +11,6 @@ const createApplicant = async (req, res) => {
       });
   };
   };
-  
 
 const login = async (req, res) => {
   try {
