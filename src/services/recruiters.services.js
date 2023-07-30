@@ -1,9 +1,10 @@
-const recruiter = require('../models/recruiters.models');
-const response = require('../utils/response');
-const bcrypt = require('bcrypt');
+const recruiter = require("../models/recruiters.models");
+const response = require("../utils/response");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const generateResetPin = require('../utils/generateResetPin');
+const generateResetPin = require("../utils/generateResetPin");
 const sendMail = require("../utils/sendMail");
+const vacantPosition = require("../models/jobPosting.models");
 
 const createRecruiter = async (payload) => {
     const { Email } = payload;
@@ -89,4 +90,9 @@ const resetPassword = async (payload) => {
   );
 };
 
-module.exports = { createRecruiter, login, forgotPassword, resetPassword  };
+const postJob = async (payload) => {
+    const postedJob = await vacantPosition.create(payload);
+    return response.buildSuccessResponse("job posted successfully", 200, postedJob);
+};
+
+module.exports = { createRecruiter, login, forgotPassword, resetPassword, postJob };

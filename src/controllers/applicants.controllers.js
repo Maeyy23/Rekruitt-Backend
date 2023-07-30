@@ -49,6 +49,18 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const searchJob = async (req, res) => {
+  try {
+    const data = await applicantServices.searchJob(req.query);
+    res.status(data.statusCode).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to search for job",
+      status: "failure",
+    })
+  }
+};
 
 
-module.exports = { createApplicant, login, forgotPassword, resetPassword };
+
+module.exports = { createApplicant, login, forgotPassword, resetPassword, searchJob };

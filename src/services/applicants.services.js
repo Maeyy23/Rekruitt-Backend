@@ -4,6 +4,7 @@ const responses= require("../utils/response")
 const jwt = require("jsonwebtoken");
 const generateResetPin = require('../utils/generateResetPin');
 const sendMail = require("../utils/sendMail");
+const postJob = require ("../models/jobPosting.models.js")
 
 
 async function createApplicant(payload) {
@@ -91,5 +92,25 @@ const resetPassword = async (payload) => {
     updatedUser
   );
 };
+// function to search for posted jobs
+async function searchJob(query) {
+  try {
+    const searchedJob = query.search
+      ? {
+        $or: [
+          { jobTitle: { $regex:query.search, $options: "i" } },
+          { jobType: { $regex:query.search, $options: "i" } },
+          { experienceLevel: { $regex: query.search, $options: "i" } },
+          { jobMode: { $regex:query.search, $options: "i" } },
+        ],
+        // Company: query.Company,
+      }
+      : {};
+    const foundJob = await postJob.find(searchedJob);
+    return responses.buildSuccessResponse("Successfully fetched job", 200, foundJob);
+  } catch (error) {
+    return responses.buildFailureResponse("Failed to fetch job", 500);
+  }
+}
 
-module.exports = { createApplicant, login, forgotPassword, resetPassword }
+module.exports = { createApplicant, login, forgotPassword, resetPassword, searchJob }
