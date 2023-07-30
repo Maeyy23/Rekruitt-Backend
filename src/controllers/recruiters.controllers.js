@@ -8,7 +8,7 @@ const createRecruiter = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             message: 'unable to create recruiter',
-            status: 400,
+            status: "failure",
         })
     };
 };
@@ -20,7 +20,7 @@ const login = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             message: 'unable to login',
-            status: 400,
+            status: "failure",
         })
     };
 };
@@ -33,9 +33,8 @@ const forgotPassword = async (req, res) => {
         message: "Unable to forget password",
         status: "failure",
       })
-  }
+    }
   };
-  
   
   const resetPassword = async (req, res) => {
     try {
@@ -47,5 +46,18 @@ const forgotPassword = async (req, res) => {
         status: "failure",
       })
     }
-  };
-module.exports = {createRecruiter, login, forgotPassword,  resetPassword}
+};
+  
+const postJob = async (req, res) => {
+  try {
+    const payload = await recruiterService.postJob(req.body);
+    res.status(payload.statusCode).json(payload);
+  } catch (error) {
+    res.status(500).json({
+      message: "Unable to post job",
+      status: "failure",
+    })
+  }
+};
+
+module.exports = {createRecruiter, login, forgotPassword,  resetPassword, postJob}

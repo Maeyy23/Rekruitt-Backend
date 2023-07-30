@@ -8,5 +8,6 @@ router.post('/createApplicant', applicantValidation, applicantController.createA
 router.post('/login', applicantController.login);
 router.post('/forgot-password', applicantController.forgotPassword);
 router.post('/reset-password', applicantController.resetPassword);
+router.get('/jobs', applicantController.searchJob);
 
 module.exports = router;

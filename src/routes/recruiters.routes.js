@@ -7,7 +7,8 @@ const recruitersValidation = require('../middlewares/validations/recruiters.vali
 router.post('/createRecruiter', recruitersValidation, recruiterController.createRecruiter);
 router.post('/login', recruiterController.login);
 router.post('/forgot-password',  recruiterController.forgotPassword);
-router.post('/reset-password',  recruiterController.resetPassword);
+router.post('/reset-password', recruiterController.resetPassword);
+router.post('/postJob',  recruiterController.postJob);
 
 
 module.exports = router
