@@ -2,10 +2,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const rateLimit = require('express-rate-limit');
+const bodyParser = require("body-parser");
 
+// import from src folder
 const usersRoutes = require('./routes/user.routes');
 const connectDB = require ("./configs/database.js");
 
+// dotenv configurtions
 dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 6060;
@@ -19,12 +22,16 @@ const limiter = rateLimit({
 });
 
 // Connecting to Database
-//connectDB("mongodb+srv://msmabel23:mabel772@cluster0.wc6fe7v.mongodb.net/");
-// console.log(process.env.MONGO_URI)
 connectDB(process.env.MONGO_URI)
+
 // Calling the routes
 app.use(limiter);
 app.use(express.json());
+
+// Parse requests using bodyParser //
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use('/users', usersRoutes);
 
 app.get("/", (req, res) => {
