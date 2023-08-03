@@ -7,9 +7,7 @@ router.post("/signup/recruiters", userControllers.signUpRecruiterController);
 router.post("/login", userControllers.loginController);
 router.post("/forgot-password", userControllers.forgotPasswordController);
 router.post("/reset-password", userControllers.resetPasswordController);
-router.put("/update-profile", (req, res) => {
-  res.send(userControllers.updateProfileController);
-});
+router.put("/update-profile", userControllers.updateProfileController);
 //,userControllers.updateProfileController);
 
 module.exports = router;

@@ -123,26 +123,14 @@ const resetPassword = async (payload) => {
 
 // to update recruiter profile
 const updateProfile = async (payload) => {
-  const userProfile = await User.findOne(
-    { _id: payload._id },
-    { email: payload.email }
-  );
+  console.log({ payload });
+  const userProfile = await User.findOne({ _id: payload.id });
   if (!userProfile) {
     return responses.buildFailureResponse("User Id not found", 400);
   }
   const updatedProfile = await User.findByIdAndUpdate(
     { _id: userProfile._id },
-    {
-      companyName: "",
-      positionInCompany: "",
-      countryCode: "",
-      phoneNumber: "",
-      numberOfEmployees: Number,
-      typeOfIndustry: "",
-      website: "",
-      country: "",
-      address: "",
-    },
+    payload,
     { new: true }
   );
   //   console.log(updatedProfile);

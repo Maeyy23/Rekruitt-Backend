@@ -75,7 +75,7 @@ const resetPasswordController = async (req, res) => {
 
 const updateProfileController = async (req, res) => {
   try {
-    const data = await userServices.updateProfile(req.params);
+    const data = await userServices.updateProfile(req.body);
     return res.status(data.statusCode).json(data);
   } catch (error) {
     return res.status(500).json({
@@ -91,4 +91,5 @@ module.exports = {
   loginController,
   forgotPasswordController,
   resetPasswordController,
+  updateProfileController,
 };
