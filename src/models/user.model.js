@@ -27,7 +27,7 @@ const userSchema = Mongoose.Schema(
       type: Number,
     },
     dateOfBirth: {
-      type: String,
+      type: Date,
     },
     companyName: {
       type: String,
@@ -76,6 +76,8 @@ const userSchema = Mongoose.Schema(
     },
     availaility: {
       type: String,
+      enum: ["available", "unavailable"],
+      default: "available",
     },
   },
   {
