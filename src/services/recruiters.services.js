@@ -7,8 +7,8 @@ const sendMail = require("../utils/sendMail");
 const vacantPosition = require("../models/jobPosting.models");
 
 const createRecruiter = async (payload) => {
-    const { Email } = payload;
-    const foundEmail = await recruiter.findOne({ Email: Email });
+    const { email } = payload;
+    const foundEmail = await recruiter.findOne({ email: email });
     if (foundEmail) {
         return response.buildFailureResponse("email already exists", 400)
     }
@@ -21,10 +21,9 @@ const createRecruiter = async (payload) => {
     return response.buildSuccessResponse("recruiter created successfully", 200, savedRecruiter);
 
 };
-
 const login = async (payload) => {
     try {
-        const foundUser = await recruiter.findOne({ Email: payload.Email }).lean()
+        const foundUser = await recruiter.findOne({ email: payload.email }).lean()
         if (!foundUser) {
             return response.buildFailureResponse("user not found", 400)
         };
@@ -33,7 +32,7 @@ const login = async (payload) => {
         if (!foundPassword) {
             return response.buildFailureResponse("password incorrect", 400)
         };
-        const token = jwt.sign({ Email: foundUser.Email, firstName: foundUser.firstName, _id: foundUser._id }, process.env.JWT_SECRET,
+        const token = jwt.sign({ email: foundUser.email, firstName: foundUser.firstName, _id: foundUser._id }, process.env.JWT_SECRET,
             { expiresIn: '30d' });
         foundUser.accessToken = token
         return response.buildSuccessResponse("login successfull", 200, foundUser);
@@ -47,7 +46,7 @@ const login = async (payload) => {
 //forget password logic
 
 const forgotPassword = async (payload) => {
-    const emailFound = await recruiter.findOne({ Email: payload.Email })
+    const emailFound = await recruiter.findOne({ email: payload.email })
     if (!emailFound) {
         return response.buildFailureResponse("Email not found", 400)
     }
@@ -55,7 +54,7 @@ const forgotPassword = async (payload) => {
     const updatedUser = await recruiter.findByIdAndUpdate({ _id: emailFound._id }, { resetPin: resetPin }, { new: true });
 
     const forgotPasswordPayload = {
-        to: updatedUser.Email,
+        to: updatedUser.email,
         subject: "RESET PASSWORD",
         pin: resetPin,
     };
@@ -69,7 +68,7 @@ const forgotPassword = async (payload) => {
 
 //reset password logic
 const resetPassword = async (payload) => {
-  const foundUserAndPin = await recruiter.findOne({Email: payload.Email, resetPin: payload.resetPin, });
+  const foundUserAndPin = await recruiter.findOne({email: payload.email, resetPin: payload.resetPin, });
   if (!foundUserAndPin) {
     return response.buildFailureResponse("Reset Pin Invalid", 400);
   };

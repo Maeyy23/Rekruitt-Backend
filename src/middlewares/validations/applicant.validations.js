@@ -10,7 +10,7 @@ function applicantValidation(req, res, next) {
     .notEmpty().withMessage('Last name is required')
     .isAlpha().withMessage('Last name must contain only alphabetic characters'),
   
-  check("Email")
+  check("email")
       .notEmpty().withMessage("Conatct Email is required")
       .isEmail().withMessage("Invalid email format"),
   

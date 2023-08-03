@@ -9,7 +9,7 @@ const recruiterSchema = mongoose.Schema(
             type: 'string',
             required: true
         },
-        Email: {
+        email: {
             type: 'string',
             required: true,
             unique: true,

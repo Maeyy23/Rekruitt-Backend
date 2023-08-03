@@ -21,13 +21,27 @@ const jobPostingSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    company: {
+    companyName: {
         type: String,
         required: true,
     },
-    applicationLink: { 
+    jobUrl: { 
         type: String,
         required: true,
+    },
+    location: { 
+        type: String,
+        required: true,
+    },
+    requirements: { 
+        type: String,
+        required: true,
+    },
+    minSalary: { 
+        type: String,
+    },
+    maxSalary: {  
+        type: String,
     },
 
     deadline: {

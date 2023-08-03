@@ -8,8 +8,8 @@ const postJob = require ("../models/jobPosting.models.js")
 
 
 async function createApplicant(payload) {
-const { Email} = payload;
-  const foundEmail = await applicants.findOne({ Email: Email });
+const { email} = payload;
+  const foundEmail = await applicants.findOne({ email: email });
     if (foundEmail) {
         return responses.buildFailureResponse('applicant email already registered', 400)
   }
@@ -25,7 +25,7 @@ const { Email} = payload;
 
 const login = async (payload) => {
   try {
-    const foundUser = await applicants.findOne({ Email: payload.Email }).lean()
+    const foundUser = await applicants.findOne({ email: payload.email }).lean()
     if (!foundUser) {
       return responses.buildFailureResponse('user not found', 400)
     };
@@ -34,7 +34,7 @@ const login = async (payload) => {
     if (!foundPassword) {
       return responses.buildFailureResponse('password incorrect', 403)
     };
-    const token = jwt.sign({ Email: foundUser.Email, firstName: foundUser.firstName, _id: foundUser._id }, process.env.JWT_SECRET,
+    const token = jwt.sign({ email: foundUser.email, firstName: foundUser.firstName, _id: foundUser._id }, process.env.JWT_SECRET,
       {
         expiresIn: '30d'
       })
@@ -50,15 +50,15 @@ const login = async (payload) => {
 //forget password logic
 
   const forgotPassword = async (payload) => {   
-    const emailFound = await applicants.findOne({ Email: payload.Email })
+    const emailFound = await applicants.findOne({ email: payload.email })
     if (!emailFound) {
-        return responses.buildFailureResponse("Email not found", 400)
+        return responses.buildFailureResponse("email not found", 400)
     }
     const resetPin = generateResetPin()
     const updatedUser = await applicants.findByIdAndUpdate({ _id: emailFound._id }, { resetPin: resetPin }, { new: true });
 
     const forgotPasswordPayload = {
-        to: updatedUser.Email,
+        to: updatedUser.email,
         subject: "RESET PASSWORD",
         pin: resetPin,
     };
@@ -72,7 +72,7 @@ const login = async (payload) => {
 
 //reset password logic
 const resetPassword = async (payload) => {
-  const foundUserAndPin = await applicants.findOne({Email: payload.Email, resetPin: payload.resetPin, });
+  const foundUserAndPin = await applicants.findOne({email: payload.email, resetPin: payload.resetPin, });
   if (!foundUserAndPin) {
     return responses.buildFailureResponse("Reset Pin Invalid", 400);
   };
@@ -99,11 +99,8 @@ async function searchJob(query) {
       ? {
         $or: [
           { jobTitle: { $regex:query.search, $options: "i" } },
-          { jobType: { $regex:query.search, $options: "i" } },
-          { experienceLevel: { $regex: query.search, $options: "i" } },
-          { jobMode: { $regex:query.search, $options: "i" } },
+          { location: { $regex:query.search, $options: "i" } },
         ],
-        // Company: query.Company,
       }
       : {};
     const foundJob = await postJob.find(searchedJob);
