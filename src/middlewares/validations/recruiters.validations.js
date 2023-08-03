@@ -30,20 +30,16 @@ function recruitersValidation(req, res, next) {
  
   ];
 
-  // Run the validation checks
   Promise.all(validationChecks.map((checkFn) => checkFn.run(req)))
     .then(() => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        // Extract the error messages
         const errorMessages = errors.array().map((error) => error.msg);
-        // Return the error messages
         return res.status(400).json({ errors: errorMessages });
       }
       next();
     })
     .catch((error) => {
-      // Handle error if any of the validation checks fail
       next(error);
     });
 }

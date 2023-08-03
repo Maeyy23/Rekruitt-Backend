@@ -99,11 +99,8 @@ async function searchJob(query) {
       ? {
         $or: [
           { jobTitle: { $regex:query.search, $options: "i" } },
-          { jobType: { $regex:query.search, $options: "i" } },
-          { experienceLevel: { $regex: query.search, $options: "i" } },
-          { jobMode: { $regex:query.search, $options: "i" } },
+          { location: { $regex:query.search, $options: "i" } },
         ],
-        // Company: query.Company,
       }
       : {};
     const foundJob = await postJob.find(searchedJob);
