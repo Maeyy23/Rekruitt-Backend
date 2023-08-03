@@ -11,6 +11,7 @@ const createRecruiter = async (req, res) => {
             status: "failure",
         })
     };
+    
 };
 
 const login = async (req, res) => {
