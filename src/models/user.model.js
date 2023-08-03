@@ -59,6 +59,24 @@ const userSchema = Mongoose.Schema(
     gender: {
       type: String,
     },
+    nationality: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    highestQualification: {
+      type: String,
+    },
+    currentJobFunction: {
+      type: String,
+    },
+    yearsOfExperience: {
+      type: String,
+    },
+    availaility: {
+      type: String,
+    },
   },
   {
     timestamps: true,

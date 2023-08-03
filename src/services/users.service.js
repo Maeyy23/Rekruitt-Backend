@@ -122,7 +122,7 @@ const resetPassword = async (payload) => {
 };
 
 // to update recruiter profile
-const updateProfile = async (payload) => {
+const updateRecruiterProfile = async (payload) => {
   console.log({ payload });
   const userProfile = await User.findOne({ _id: payload.id });
   if (!userProfile) {
@@ -135,12 +135,29 @@ const updateProfile = async (payload) => {
   );
   //   console.log(updatedProfile);
   return responses.buildSuccessResponse(
-    "User updated successfully",
+    "Recruiter Profile updated Successfully",
     200,
     updatedProfile
   );
 };
 
+const updateApplicantProfile = async (payload) => {
+  console.log({ payload });
+  const userProfile = await User.findOne({ _id: payload.id });
+  if (!userProfile) {
+    return responses.buildFailureResponse("User not found", 400);
+  }
+  const updatedProfile = await User.findByIdAndUpdate(
+    { _id: userProfile._id },
+    payload,
+    { new: true }
+  );
+  return responses.buildSuccessResponse(
+    "Applicant profile updated Successfully",
+    200,
+    updatedProfile
+  );
+};
 // to update applicant profile
 module.exports = {
   signUpApplicant,
@@ -148,5 +165,6 @@ module.exports = {
   login,
   forgotPassword,
   resetPassword,
-  updateProfile,
+  updateRecruiterProfile,
+  updateApplicantProfile,
 };
