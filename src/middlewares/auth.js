@@ -1,8 +1,6 @@
-const jwt = require('jsonwebtoken')
-const models = {
-    applicant: require('../models/applicants.models.js'),
-    recruiters: require('../models/recruiters.models')
-  };
+const jwt = require("jsonwebtoken");
+const user = require("../models/user.models");
+
   
 
 async function authenticate(req, res, next) {
@@ -18,13 +16,11 @@ async function authenticate(req, res, next) {
         
         const decodedUser = jwt.decode(token)
         
-        const foundStaff = await Promise.all([
-            models.applicant.findOne({ _id: decodedUser._id }),
-            models.recruiters.findOne({ _id: decodedUser._id })
-          ]);
+        const foundStaff = user.findOne({ _id: decodedUser._id })
           
         req.user = foundStaff
-        next()
+
+      next();
     } catch (error) {
         return res.status(error?.statusCode || 500).send(error?.message || "Unable to authenticate")
     }
