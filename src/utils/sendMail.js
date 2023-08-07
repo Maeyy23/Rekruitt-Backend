@@ -1,5 +1,5 @@
-const dotenv = require('dotenv');
-const sgMail = require('@sendgrid/mail');
+const dotenv = require("dotenv");
+const sgMail = require("@sendgrid/mail");
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -51,7 +51,7 @@ const sendForgotPasswordMail = (mailPayload) => {
 `;
   const msg = {
     to: mailPayload.to, // Change to your recipient
-    from: 'joshuatobiajagbe@gmail.com', // Change to your verified sender
+    from: "joshuatobiajagbe@gmail.com", // Change to your verified sender
     subject: mailPayload.subject,
     // text: 'Click on the link below to reset your password',
     html: textMail,

@@ -5,7 +5,7 @@ const responses = require("../utils/response");
 const generateResetPin = require("../utils/generateResetPin");
 const sendMail = require("../utils/sendmail.js");
 const vacantPosition = require("../models/jobPosting.models");
-const postJob = require ("../models/jobPosting.models.js")
+const postJob = require("../models/jobPosting.models.js");
 
 const signUpApplicant = async (payload) => {
   const foundEmail = await user.findOne({ email: payload.email });
@@ -95,7 +95,6 @@ const forgotPassword = async (payload) => {
 };
 
 const resetPassword = async (payload) => {
- 
   const userAndPin = await user.findOne({
     email: payload.email,
     resetPin: payload.resetPin,
@@ -120,7 +119,6 @@ const resetPassword = async (payload) => {
   );
 };
 
-// to update recruiter profile
 const updateRecruiterProfile = async (payload) => {
   console.log({ payload });
   const userProfile = await user.findOne({ _id: payload.id });
@@ -158,43 +156,49 @@ const updateApplicantProfile = async (payload) => {
   );
 };
 
-
 const vaccant = async (payload) => {
-  const foundUser = await user.findOne({_id: payload.user._id})
-  if(foundUser.role !== 'recruiter') {
-    return res.status(400).json({
-        message: "Only recruiters are Allowed",
-        status: "failure"
-    })
+  const foundUser = await user.findOne({ _id: payload.user._id });
+  if (foundUser.role !== "recruiter") {
+    return responses.buildFailureResponse(
+      "Only Recruiters can post a job",
+      400
+    );
   }
-    const postedJob = await vacantPosition.create(payload);
-    return responses.buildSuccessResponse("job posted successfully", 200, postedJob);
+  const postedJob = await vacantPosition.create(payload);
+  return responses.buildSuccessResponse(
+    "Job posted successfully",
+    200,
+    postedJob
+  );
 };
 
 async function searchJob(query) {
   try {
-    const foundUser = await user.findOne({_id: payload.user._id})
-    if (foundUser.role !== 'applicant') {
-      return res.status(400).json({
-        message: "Only applicants are Allowed",
-        status: "failure"
-      })
+    const foundUser = await user.findOne({ _id: payload.user._id });
+    if (foundUser.role !== "applicant") {
+      return responses.buildFailureResponse(
+        "Sorry, you are not allowed this feature",
+        400
+      );
     }
-      const searchedJob = query.search
-        ? {
+    const searchedJob = query.search
+      ? {
           $or: [
-            { jobTitle: { $regex:query.search, $options: "i" } },
-            { location: { $regex:query.search, $options: "i" } },
+            { jobTitle: { $regex: query.search, $options: "i" } },
+            { location: { $regex: query.search, $options: "i" } },
           ],
         }
-        : {};
-      const foundJob = await postJob.find(searchedJob);
-      return responses.buildSuccessResponse("Successfully fetched job", 200, foundJob);
-    } catch (error) {
-      return responses.buildFailureResponse("Failed to fetch job", 500);
-    }
+      : {};
+    const foundJob = await postJob.find(searchedJob);
+    return responses.buildSuccessResponse(
+      "Successfully fetched job",
+      200,
+      foundJob
+    );
+  } catch (error) {
+    return responses.buildFailureResponse("Failed to fetch job", 500);
   }
-
+}
 
 module.exports = {
   signUpApplicant,
@@ -205,5 +209,5 @@ module.exports = {
   updateRecruiterProfile,
   updateApplicantProfile,
   vaccant,
-  searchJob
+  searchJob,
 };
