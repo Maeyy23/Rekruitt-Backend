@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 // importing from src
 const usersRoutes = require("./routes/user.routes");
+const staffRoutes = require("./routes/staff.routes.js");
 const connectDB = require("./configs/database.js");
 
 //environment variables configuration
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use("/users", usersRoutes);
+app.use("/staff", staffRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "server is up and running" });
