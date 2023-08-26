@@ -14,6 +14,6 @@ router.put("/profileUpdate", userControllers.recruiterProfileController);
 router.put("/profileUpdate", userControllers.applicantProfileController);
 router.post('/postJob', authmiddleware.authenticate, userControllers.postJob);
 router.get('/searchJobs',authmiddleware.authenticate, userControllers.searchJob);
-
+router.post('/applyJob',authmiddleware.authenticate, userControllers.applyJob);
 
 module.exports = router;
